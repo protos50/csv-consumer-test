@@ -6,7 +6,21 @@ class CovidStats:
         self.data = []
         self.invalid_data = []
         self.sex_count = {}
+        
+    # Getters methodfor accessing the attributes
+    def get_file_name(self):
+        return self.file_name
+    
+    def get_data(self):
+        return self.data
+    
+    def get_invalid_data(self):
+        return self.invalid_data
 
+    def get_sex_count(self):
+        return self.sex_count
+    
+    
     def load_data(self):
         """
         Reads the CSV file specified in the constructor and loads its content into the

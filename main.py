@@ -1,11 +1,22 @@
-from covid_csv import CovidStats
+from cli import run_cli_interface
+from gui import GUI
 
-def main():
-    # Aquí podrías agregar lógica para que el usuario seleccione el archivo CSV, si lo deseas.
-    covid_stats = CovidStats("modelo_muestra.csv")
-    covid_stats.load_data()
-    covid_stats.count_sexo()
-    covid_stats.write_invalid_data("datos_invalidos.csv")
+def main_menu():
+    
+    print("Seleccione el modo de operación:")
+    print("1. Interfaz gráfica (GTK)")
+    print("2. Interfaz de línea de comandos (CLI)")
+
+    choice = input("Ingrese el número de su elección: ")
+
+    if choice == "1":
+        gui = GUI()
+        gui.run()
+    elif choice == "2":
+        run_cli_interface()
+    else:
+        print("Opción no válida. Inténtalo de nuevo.")
+        main_menu()
 
 if __name__ == "__main__":
-    main()
+    main_menu()
