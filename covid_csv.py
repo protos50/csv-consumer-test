@@ -6,6 +6,7 @@ class CovidStats:
         self.data = []
         self.invalid_data = []
         self.sex_count = {}
+        self.vaccine_distribution = {}
         
     # Getters methodfor accessing the attributes
     def get_file_name(self):
@@ -20,6 +21,9 @@ class CovidStats:
     def get_sex_count(self):
         return self.sex_count
     
+    
+    def get_vaccine_distribution(self):
+        return self.vaccine_distribution
     
     def load_data(self):
         """
@@ -50,6 +54,20 @@ class CovidStats:
             else:
                 self.invalid_data.append(row)
 
+    
+    def count_vaccine_distribution(self):
+        """
+        Counts how many people have received each type of vaccine and calculates
+        the proportion of each vaccine type with respect to the total.
+        """
+        total_vaccines = 0
+
+        for row in self.data:
+            vaccine_type = row["vacuna"]
+            self.vaccine_distribution[vaccine_type] = self.vaccine_distribution.get(vaccine_type, 0) + 1
+            total_vaccines += 1
+
+            
         
     def write_invalid_data(self, output_file):
         if self.invalid_data:
