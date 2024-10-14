@@ -1,0 +1,3 @@
+sexo,grupo_etario,jurisdiccion_residencia,jurisdiccion_residencia_id,depto_residencia,depto_residencia_id,jurisdiccion_aplicacion,jurisdiccion_aplicacion_id,depto_aplicacion,depto_aplicacion_id,fecha_aplicacion,vacuna,cod_dosis_generica,nombre_dosis_generica,condicion_aplicacion,orden_dosis,lote_vacuna,id_persona_dw
+MASCULINO,40-49,Buenos Aires,06,Navarro,574,Buenos Aires,06,Navarro,574,2022-05-27,Pfizer,14,Refuerzo,SIN Factores de Riesgo,3,FN1672,14005030329.0
+FEMENINO,50-59,Buenos Aires,06,Almirante Brown,028,Buenos Aires,06,Almirante Brown,028,2022-08-29,Sputnik,14,Refuerzo,CON Factores de Riesgo,3,MDD9MDE1,14151113203.0
