@@ -32,6 +32,12 @@ class CovidStats:
     def get_jurisdiccion_count(self):
         return self.jurisdiccion_count
     
+    def get_second_doses_jurisdiccion_count(self):
+        return self.second_doses_jurisdiccion_count
+    
+    def get_reforced_olders_count(self):
+        return self.reforced_olders_count
+    
     def load_data(self):
         """
         Reads the CSV file specified in the constructor and loads its content into the
@@ -105,10 +111,6 @@ class CovidStats:
                 jurisdiccion = row["jurisdiccion_residencia"]
                 self.second_doses_jurisdiccion_count[jurisdiccion] = self.second_doses_jurisdiccion_count.get(jurisdiccion, 0) + 1
 
-        # Imprimir el resultado
-        for jurisdiccion, count in self.second_doses_jurisdiccion_count.items():
-            print(f"{jurisdiccion}: {count} personas recibieron la segunda dosis")
-
     def count_reforced_doses_by_age(self):
         """
         Counts the number of people that have received a refuerzo dose and are older than 60 years old.
@@ -121,8 +123,6 @@ class CovidStats:
             is_grater_60 = (grupo_etario.startswith('60') or grupo_etario.startswith('70') or grupo_etario.startswith('80') or grupo_etario.startswith('90'))
             if doses_name == 'Refuerzo' and is_grater_60:
                 self.reforced_olders_count += 1
-
-        print(f"Personas mayores de 60 años que han recibido dosis de refuerzo: {self.reforced_olders_count}")
 
         
     def write_invalid_data(self, output_file):

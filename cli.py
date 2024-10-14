@@ -2,7 +2,7 @@ from covid_csv import CovidStats
 
 def run_cli_interface():
     print("\nBienvenido al sistema de estadísticas de COVID-19.")
-    covid_stats = CovidStats("modelo_muestra.csv")
+    covid_stats = CovidStats("datos_nomivac_parte1.csv")
     covid_stats.load_data()
     covid_stats.count_sexo()
     
@@ -33,8 +33,17 @@ def run_cli_interface():
     for jurisdiccion, count in covid_stats.get_jurisdiccion_count().items():
         print(f"{jurisdiccion}: {count} dosis")  
         
-    covid_stats.count_second_doses_by_jurisdiccion()
+    # Imprime los resultados del conteo de la segunda dosis por jurisdiccion
+    covid_stats.count_second_doses_by_jurisdiccion()    
+    print("\nConteo de dosis: ")
+    for jurisdiccion, count in covid_stats.get_second_doses_jurisdiccion_count().items():
+        print(f"{jurisdiccion}: {count} personas recibieron la segunda dosis")
+
+    # Imprime los resultados del conteo de personas mayores de 60 años que han recibido dosis de refuerzo
+    print("\nConteo de personas mayores de 60 años que han recibido dosis de refuerzo: ")
     covid_stats.count_reforced_doses_by_age()
+    print(f"Personas mayores de 60 años que han recibido dosis de refuerzo: {covid_stats.get_reforced_olders_count()} ")
+
     
     # Imprime los registros inválidos
     covid_stats.write_invalid_data("invalid_data.csv")
