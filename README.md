@@ -41,3 +41,11 @@ The project performs the following operations:
 - Special Request:
   - Number of people who received the second dose in each jurisdiction.
   - Number of people over 60 years old who received a booster dose.
+
+The resulting executable can be found in the `dist` folder. As long as you have GTK 3 installed on your system, this executable will work properly.
+
+### Download the Executable for linux systems with GTK
+You can download the GUI executable from the latest release using the link below:
+- [Download the GUI executable](https://github.com/protos50/csv-consumer-test/releases/edit/v0.1)
+
+This link will take you to the release page, where you can download the compiled version of the app from the `dist` folder.
