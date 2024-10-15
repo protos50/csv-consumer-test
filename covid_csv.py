@@ -16,11 +16,10 @@ class CovidStats:
     # Getters method for accessing the attributes
     def get_file_name(self):
         return self.file_name
-    
+    '''
     def get_data(self):
-        
         return self.data
-    
+    '''
     def get_invalid_data(self):
         return self.invalid_data
 
@@ -152,6 +151,8 @@ class CovidStats:
         """
         for row in chunk:
             jurisdiccion = row["jurisdiccion_residencia"]
+            if jurisdiccion == 'S.I.':
+                self.invalid_data.append(row)
             self.jurisdiccion_count[jurisdiccion] = self.jurisdiccion_count.get(jurisdiccion, 0) + 1
 
        
@@ -166,6 +167,8 @@ class CovidStats:
         for row in chunk:
             if row["orden_dosis"] == '2':  
                 jurisdiccion = row["jurisdiccion_residencia"]
+                if jurisdiccion == 'S.I.':
+                    self.invalid_data.append(row)
                 self.second_doses_jurisdiccion_count[jurisdiccion] = self.second_doses_jurisdiccion_count.get(jurisdiccion, 0) + 1
 
     def count_reforced_doses_by_age(self, chunk):
@@ -196,6 +199,3 @@ class CovidStats:
                 writer = csv.DictWriter(csvFile, fieldnames=headers)
                 writer.writeheader()  # Escribe la cabecera en el nuevo archivo CSV
                 writer.writerows(self.invalid_data)  # Escribe todos los registros con errores
-            print(f"Datos inválidos guardados en: {output_file}")
-        else:
-            print("No se encontraron datos inválidos para guardar.")

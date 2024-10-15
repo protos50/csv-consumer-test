@@ -1,3 +1,4 @@
+import os
 from covid_csv import CovidStats
 
 def run_cli_interface():
@@ -47,6 +48,8 @@ def run_cli_interface():
         """
         print("\nDistribución de dosis por jurisdicción: ")
         for jurisdiccion, count in covid_stats.get_jurisdiccion_count().items():
+            if jurisdiccion == "S.I.":
+                jurisdiccion = "Sin Informar"
             print(f"{jurisdiccion}: {count} dosis")
             
     def show_second_doses_by_jurisdiccion(covid_stats):
@@ -57,6 +60,8 @@ def run_cli_interface():
         """
         print("\nDistribución de dosis por jurisdicción: ")
         for jurisdiccion, count in covid_stats.get_second_doses_jurisdiccion_count().items():
+            if jurisdiccion == "S.I.":
+                jurisdiccion = "Sin Informar"
             print(f"{jurisdiccion}: {count} personas recibieron la segunda dosis")
 
 
@@ -78,7 +83,27 @@ def run_cli_interface():
         :param file_name: the name of the file to write the invalid data to
         """
         covid_stats.write_invalid_data(file_name)
-        print(f"\nRegistros inválidos guardados en {file_name}")
+        if covid_stats.get_invalid_data():
+            print(f"\nRegistros inválidos guardados en {file_name}")
+        else:
+            print(f"\nNo hay registros inválidos que guardar en {file_name}")
+        
+    def select_scv_file_directory():
+        """
+        Allows the user to select a CSV file to analyze from the current directory.
+
+        If no CSV files are found in the current directory, an error message is returned.
+        Otherwise, the function prints a list of the CSV files found and asks the user to select
+        one by entering the corresponding number. The selected file name is then returned.
+        """
+        csv_files = [f for f in os.listdir() if f.endswith('.csv')]
+        if not csv_files:
+            return "\nError: No se encontraron archivos CSV en el directorio actual."
+        print("\nArchivos CSV encontrados:")
+        for i, file in enumerate(csv_files):
+            print(f"{i + 1}. {file}")
+        selection = int(input("\nSeleccione el archivo CSV a analizar (ingrese el número correspondiente): "))
+        return csv_files[selection - 1]
         
       
     def run_analysis(file_name):
@@ -104,7 +129,7 @@ def run_cli_interface():
         """
         try:
             print("\nBienvenido al sistema de estadísticas de COVID-19.")
-
+            print(f"\nAnalizando el archivo CSV  {file_name}. Esto puede demorar un poco. Esperemos...:\n")
             # Create an instance of CovidStats
             covid_stats = CovidStats(file_name, chunk_size=100000)
             # Load and count the data
@@ -126,7 +151,7 @@ def run_cli_interface():
 
      
     # Run the main analysis function     
-    run_analysis('datos_nomivac_parte1.csv')
+    run_analysis(select_scv_file_directory())
     
 if __name__ == "__main__":
     run_cli_interface()
