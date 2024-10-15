@@ -2,7 +2,6 @@ from cli import run_cli_interface
 from gui import GUI
 
 def main_menu():
-    
     print("Seleccione el modo de operación:")
     print("1. Interfaz gráfica (GTK)")
     print("2. Interfaz de línea de comandos (CLI)")

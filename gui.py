@@ -27,14 +27,12 @@ class GUI:
         self.vbox.pack_start(self.csv_combo, False, False, 0)
 
         # Button to start the analysis
-        self.analysis_button = Gtk.Button(label="Start Analysis")
+        self.analysis_button = Gtk.Button(label="Load and Analyze Data")
         self.analysis_button.connect("clicked", self.start_analysis)
         self.vbox.pack_start(self.analysis_button, False, False, 0)
 
-        # Button to count by gender
-        self.gender_count_button = Gtk.Button(label="Count by Gender")
-        self.gender_count_button.connect("clicked", self.count_by_gender)
-        self.vbox.pack_start(self.gender_count_button, False, False, 0)
+        # Analysis buttons
+        self.add_analysis_buttons()
 
         self.result_label = Gtk.Label(label="Results will be displayed here.")
         self.vbox.pack_start(self.result_label, False, False, 0)
@@ -51,16 +49,94 @@ class GUI:
         """Initialize CovidStats with the selected file and load data."""
         selected_file = self.csv_combo.get_active_text()
         if selected_file:
-            self.covid_stats = CovidStats(selected_file)
+            self.covid_stats = CovidStats(selected_file, chunk_size=100000)
             self.covid_stats.load_data()
-            self.result_label.set_text(f"Data loaded from {selected_file}.")
+            self.covid_stats.count_total_records()
+            self.result_label.set_text(f"Data loaded from {selected_file}. Total records: {self.covid_stats.get_total_records()}")
+        else:
+            self.result_label.set_text("Please select a CSV file to load.")
+
+    def add_analysis_buttons(self):
+        """Add buttons for various analysis functionalities."""
+        buttons_info = [
+            ("Count by Gender", self.count_by_gender),
+            ("Vaccine Distribution", self.show_vaccine_distribution),
+            ("Doses by Jurisdiction", self.show_distribution_by_jurisdiccion),
+            ("Second Doses by Jurisdiction", self.show_second_doses_by_jurisdiccion),
+            ("Boosters for Older Adults", self.show_reforced_olders_count),
+            ("Save Invalid Data", self.save_invalid_data)
+        ]
+
+        for label, callback in buttons_info:
+            button = Gtk.Button(label=label)
+            button.connect("clicked", callback)
+            self.vbox.pack_start(button, False, False, 0)
 
     def count_by_gender(self, widget):
         """Perform gender count analysis and display the results."""
         if self.covid_stats:
-            self.covid_stats.count_sexo()
-            result_text = f"Females: {self.covid_stats.sex_count.get('F', 0)}, Males: {self.covid_stats.sex_count.get('M', 0)}"
+            sex_count = self.covid_stats.get_sex_count()
+            result_text = (
+                f"Females: {sex_count.get('F', 0)}\n"
+                f"Males: {sex_count.get('M', 0)}\n"
+                f"No Informado: {sex_count.get('S.I.', 0)}\n"
+                f"No Binario: {sex_count.get('X', 0)}\n"
+                f"Invalid: {sex_count.get('invalid gender format', 0)}"
+            )
             self.result_label.set_text(result_text)
+        else:
+            self.result_label.set_text("Please load a CSV file first.")
+
+    def show_vaccine_distribution(self, widget):
+        """Show vaccine distribution and display the results."""
+        if self.covid_stats:
+            result_text = "Distribución de vacunas:\n"
+            for vaccine, count in self.covid_stats.get_vaccine_distribution().items():
+                proportion = (count / self.covid_stats.get_total_records()) * 100
+                result_text += f"{vaccine}: {proportion:.2f}%\n"
+            self.result_label.set_text(result_text)
+        else:
+            self.result_label.set_text("Please load a CSV file first.")
+
+    def show_distribution_by_jurisdiccion(self, widget):
+        """Show distribution by jurisdiction and display the results."""
+        if self.covid_stats:
+            result_text = "Distribución de dosis por jurisdicción:\n"
+            for jurisdiccion, count in self.covid_stats.get_jurisdiccion_count().items():
+                jurisdiccion_name = "Sin Informar" if jurisdiccion == "S.I." else jurisdiccion
+                result_text += f"{jurisdiccion_name}: {count} dosis\n"
+            self.result_label.set_text(result_text)
+        else:
+            self.result_label.set_text("Please load a CSV file first.")
+
+    def show_second_doses_by_jurisdiccion(self, widget):
+        """Show second doses by jurisdiction and display the results."""
+        if self.covid_stats:
+            result_text = "Distribución de segundas dosis por jurisdicción:\n"
+            for jurisdiccion, count in self.covid_stats.get_second_doses_jurisdiccion_count().items():
+                jurisdiccion_name = "Sin Informar" if jurisdiccion == "S.I." else jurisdiccion
+                result_text += f"{jurisdiccion_name}: {count} personas\n"
+            self.result_label.set_text(result_text)
+        else:
+            self.result_label.set_text("Please load a CSV file first.")
+
+    def show_reforced_olders_count(self, widget):
+        """Show booster count for older adults and display the results."""
+        if self.covid_stats:
+            count = self.covid_stats.get_reforced_olders_count()
+            self.result_label.set_text(f"Personas mayores de 60 años con refuerzo: {count}")
+        else:
+            self.result_label.set_text("Please load a CSV file first.")
+
+    def save_invalid_data(self, widget):
+        """Save invalid data to a file and notify the user."""
+        if self.covid_stats:
+            file_name = 'invalid_data.csv'
+            self.covid_stats.write_invalid_data(file_name)
+            if self.covid_stats.get_invalid_data():
+                self.result_label.set_text(f"Registros inválidos guardados en {file_name}")
+            else:
+                self.result_label.set_text("No hay registros inválidos para guardar.")
         else:
             self.result_label.set_text("Please load a CSV file first.")
 

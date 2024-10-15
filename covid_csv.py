@@ -1,9 +1,11 @@
 import csv
 
 class CovidStats:
-    def __init__(self, file_name):
+    def __init__(self, file_name, chunk_size=10000):
         self.file_name = file_name
-        self.data = []
+        self.chunk_size = chunk_size
+        self.total_records = 0
+        #self.data = []
         self.invalid_data = []
         self.sex_count = {}
         self.vaccine_distribution = {}
@@ -14,13 +16,11 @@ class CovidStats:
     # Getters method for accessing the attributes
     def get_file_name(self):
         return self.file_name
-    
+    '''
     def get_data(self):
-        
         return self.data
-    
+    '''
     def get_invalid_data(self):
-        
         return self.invalid_data
 
     def get_sex_count(self):
@@ -32,89 +32,152 @@ class CovidStats:
     def get_jurisdiccion_count(self):
         return self.jurisdiccion_count
     
-    def load_data(self):
+    def get_second_doses_jurisdiccion_count(self):
+        return self.second_doses_jurisdiccion_count
+    
+    def get_reforced_olders_count(self):
+        return self.reforced_olders_count
+    
+    def get_invalid_data(self):
+        return self.invalid_data
+    
+    def get_total_records(self):
+        return self.total_records
+
+    def count_total_records(self):
         """
-        Reads the CSV file specified in the constructor and loads its content into the
-        data attribute. The data attribute is a list of dictionaries, where each dictionary
-        represents a row in the CSV file. The keys of the dictionary are the headers of the
-        CSV file, and the values are the values in the CSV file for the given row.
+        Counts the total number of records in the CSV file.
+
+        This method reads the CSV file and stores the total number of records
+        in the total_records attribute. It then prints the total number of
+        records to the console.
 
         :return: None
         """
         with open(self.file_name, "r") as csvFile:
-            headers = csvFile.readline().strip().split(",") 
-               
+            self.total_records = sum(1 for _ in csvFile) - 1  # -1 to exclude the header
+    
+    def load_data(self):
+        """
+        Loads the data from the CSV file and processes it in chunks.
+
+        This method processes the CSV file in chunks of a specified size
+        (default is 10000) to avoid loading all the data into memory at once.
+        It reads the file line by line and stores each row in a dictionary
+        which is then appended to a list. When the list reaches the specified
+        chunk size, it is processed and reset to empty. This process is repeated
+        until all the data has been processed.
+
+        The processed data is stored in the data attribute as a list of dictionaries.
+        """
+        with open(self.file_name, "r") as csvFile:
+            headers = csvFile.readline().strip().split(",")
+            chunk = []
+            
             for line in csvFile:
                 row_data = dict(zip(headers, line.strip().split(",")))
-                self.data.append(row_data)             
+                chunk.append(row_data)
+                
+                if len(chunk) >= self.chunk_size:
+                    #self.data.extend(chunk)  # save the chunk in the list data
+                    self.process_chunk(chunk)  # process the chunk
+                    chunk = []  # reset the chunk
+                    
+            # Procesa el último chunk si hay datos restantes
+            if chunk:
+                #self.data.extend(chunk)
+                self.process_chunk(chunk)         
     
-
-
-    def count_sexo(self):
+    def process_chunk(self, chunk):
         """
-        Counts the number of people in each gender and stores the result in the
-        sex_count attribute. The sex_count attribute is a dictionary where the
-        keys are the genders and the values are the number of people in each gender.
+        Processes a chunk of data and updates the corresponding attributes.
 
-        Also, it stores the rows with invalid gender in the invalid_data attribute.
+        This method receives a list of dictionaries (chunk) and processes it by
+        calling the corresponding methods to update the attributes of the
+        CovidStats object. The methods called are:
+
+        - count_sexo: updates the sex_count attribute
+        - count_vaccine_distribution: updates the vaccine_distribution attribute
+        - count_doses_by_jurisdiccion: updates the jurisdiccion_count attribute
+        - count_second_doses_by_jurisdiccion: updates the second_doses_jurisdiccion_count attribute
+        - count_reforced_doses_by_age: updates the reforced_olders_count attribute
+
+        :param chunk: a list of dictionaries
         """
-        valid_genders = {'F', 'M', 'S.I.'}  # Valid genders as a set
-        
-        for row in self.data:
+        self.count_sexo(chunk)
+        self.count_vaccine_distribution(chunk)
+        self.count_doses_by_jurisdiccion(chunk)
+        self.count_second_doses_by_jurisdiccion(chunk)
+        self.count_reforced_doses_by_age(chunk)
+
+
+
+    def count_sexo(self, chunk):
+        """
+        Counts the number of people for each gender and stores the result in the
+        sex_count attribute. The sex_count attribute is a dictionary where the keys are the
+        genders and the values are the number of people for each gender.
+
+        :param chunk: a list of dictionaries
+        """
+        valid_genders = {'F', 'M', 'S.I.', 'X'}  # Valid genders as a set
+        for row in chunk:
             gender = row["sexo"]
             
             if gender in valid_genders:
                 self.sex_count[gender] = self.sex_count.get(gender, 0) + 1
             else:
+                self.sex_count["invalid gender format"] = self.sex_count.get("invalid gender format", 0) + 1
                 self.invalid_data.append(row)
 
     
-    def count_vaccine_distribution(self):
+    def count_vaccine_distribution(self, chunk):
         """
-        Counts the number of people for each vaccine type and stores the result in the
-        vaccine_distribution attribute. The vaccine_distribution attribute is a
-        dictionary where the keys are the vaccine types and the values are the number of
-        people for each vaccine type.
+        Counts the number of people vaccinated for each vaccine type and stores the result in the
+        vaccine_distribution attribute. The vaccine_distribution attribute is a dictionary where the
+        keys are the vaccine types and the values are the number of people vaccinated with each vaccine type.
         """
         total_vaccines = 0
-
-        for row in self.data:
+        for row in chunk:
             vaccine_type = row["vacuna"]
             self.vaccine_distribution[vaccine_type] = self.vaccine_distribution.get(vaccine_type, 0) + 1
             total_vaccines += 1
 
-    def count_doses_by_jurisdiccion(self):              
+    def count_doses_by_jurisdiccion(self, chunk):              
         """
-        Counts the number of people in each jurisdiccion_residencia and stores the result in the
-        jurisdiccion_count attribute. The jurisdiccion_count attribute is a dictionary where the
-        keys are the jurisdiccion_residencia and the values are the number of people in each jurisdiccion_residencia.
+        Counts the number of people for each jurisdiccion_residencia and stores the result in the
+        jurisdiccion_count attribute. The jurisdiccion_count attribute is a dictionary where the keys are the
+        jurisdiccion_residencia and the values are the number of people for each jurisdiccion_residencia.
         """
-        for row in self.data:
+        for row in chunk:
             jurisdiccion = row["jurisdiccion_residencia"]
+            if jurisdiccion == 'S.I.':
+                self.invalid_data.append(row)
             self.jurisdiccion_count[jurisdiccion] = self.jurisdiccion_count.get(jurisdiccion, 0) + 1
 
        
-    def count_second_doses_by_jurisdiccion(self):
+    def count_second_doses_by_jurisdiccion(self, chunk):
         """
-        Counts the number of people who have received the second dose in each jurisdiccion_residencia and stores the result in the
-        second_doses_jurisdiccion_count attribute. The second_doses_jurisdiccion_count attribute is a dictionary where the keys are the
-        jurisdiccion_residencia and the values are the number of people in each jurisdiccion_residencia who have received the second dose.
+        Counts the number of people who have received a second dose in each jurisdiccion_residencia
+        and stores the result in the second_doses_jurisdiccion_count attribute. The
+        second_doses_jurisdiccion_count attribute is a dictionary where the keys are the
+        jurisdiccion_residencia and the values are the number of people who have received a
+        second dose in each jurisdiccion_residencia.
         """
-        for row in self.data:
+        for row in chunk:
             if row["orden_dosis"] == '2':  
                 jurisdiccion = row["jurisdiccion_residencia"]
+                if jurisdiccion == 'S.I.':
+                    self.invalid_data.append(row)
                 self.second_doses_jurisdiccion_count[jurisdiccion] = self.second_doses_jurisdiccion_count.get(jurisdiccion, 0) + 1
 
-        # Imprimir el resultado
-        for jurisdiccion, count in self.second_doses_jurisdiccion_count.items():
-            print(f"{jurisdiccion}: {count} personas recibieron la segunda dosis")
-
-    def count_reforced_doses_by_age(self):
+    def count_reforced_doses_by_age(self, chunk):
         """
-        Counts the number of people that have received a refuerzo dose and are older than 60 years old.
-        The result is stored in the reforced_olders_count attribute.
+        Counts the number of people who have received a refuerzo dose and are over 60 years old.
+        
+        The count is stored in the reforced_olders_count attribute.
         """
-        for row in self.data:
+        for row in chunk:
             grupo_etario = row["grupo_etario"]
             doses_name = row["nombre_dosis_generica"]
             
@@ -122,10 +185,13 @@ class CovidStats:
             if doses_name == 'Refuerzo' and is_grater_60:
                 self.reforced_olders_count += 1
 
-        print(f"Personas mayores de 60 años que han recibido dosis de refuerzo: {self.reforced_olders_count}")
-
         
     def write_invalid_data(self, output_file):
+        """
+        Writes the invalid data to a file.
+
+        :param output_file: the name of the file to write the invalid data to
+        """
         if self.invalid_data:
             headers = self.invalid_data[0].keys()  # Usa las keys del primer diccionario para obtener las headers  
             
@@ -133,6 +199,3 @@ class CovidStats:
                 writer = csv.DictWriter(csvFile, fieldnames=headers)
                 writer.writeheader()  # Escribe la cabecera en el nuevo archivo CSV
                 writer.writerows(self.invalid_data)  # Escribe todos los registros con errores
-            print(f"Datos inválidos guardados en: {output_file}")
-        else:
-            print("No se encontraron datos inválidos para guardar.")
