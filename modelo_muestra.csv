@@ -1,0 +1,26 @@
+sexo,grupo_etario,jurisdiccion_residencia,jurisdiccion_residencia_id,depto_residencia,depto_residencia_id,jurisdiccion_aplicacion,jurisdiccion_aplicacion_id,depto_aplicacion,depto_aplicacion_id,fecha_aplicacion,vacuna,cod_dosis_generica,nombre_dosis_generica,condicion_aplicacion,orden_dosis,lote_vacuna,id_persona_dw
+M,30-39,Mendoza,50,Rivadavia,084,Mendoza,50,Rivadavia,084,2021-08-14,AstraZeneca,3,2da,Estratégico,2,NJ0272,14152852517.0
+M,30-39,Buenos Aires,06,Berazategui,091,Buenos Aires,06,Berazategui,091,2021-08-31,AstraZeneca,3,2da,18 a 59 años CON Factores de Riesgo,2,77786,-167125.0
+M,40-49,Buenos Aires,06,Quilmes,658,Buenos Aires,06,Quilmes,658,2021-09-21,Sputnik,3,2da,18 a 59 años CON Factores de Riesgo,2,LZT3LZT4,14078547481.0
+M,<12,Santiago del Estero,86,Loreto,105,Santiago del Estero,86,Loreto,105,2021-10-19,Sinopharm,2,1ra,3 a 11 años SIN Factores de Riesgo,1,202108B2087,14125645557.0
+M,40-49,Buenos Aires,06,Tres de Febrero,840,Buenos Aires,06,Tres de Febrero,840,2021-09-20,Sputnik,3,2da,18 a 59 años CON Factores de Riesgo,2,LZT6LZT7,14100796899.0
+M,80-89,Santiago del Estero,86,Banda,035,Santiago del Estero,86,Capital,049,2021-09-01,Sputnik,3,2da,60 o más años,2,II-850621,14146214915.0
+M,70-79,Buenos Aires,06,Morón,568,Buenos Aires,06,Morón,568,2021-03-28,Sputnik,2,1ra,60 o más años,1,I-110121,14135435337.0
+M,60-69,Buenos Aires,06,Necochea,581,Buenos Aires,06,Necochea,581,2021-07-03,AstraZeneca,3,2da,60 o más años,2,NH0335,14045744013.0
+F,40-49,Córdoba,14,Capital,014,Córdoba,14,Capital,014,2021-07-02,AstraZeneca,2,1ra,40 a 49 años SIN Factores de Riesgo,1,NH0335,14067083903.0
+F,60-69,Entre Ríos,30,La Paz,070,Entre Ríos,30,La Paz,070,2021-06-30,AstraZeneca,3,2da,60 o más años,2,NH0303,14049338921.0
+F,30-39,Corrientes,18,Capital,021,Corrientes,18,Capital,021,2021-09-13,Sputnik,3,2da,18 a 59 años CON Factores de Riesgo,2,II-850621,14128129963.0
+F,80-89,Formosa,34,Pilcomayo,049,Formosa,34,Pilcomayo,049,2021-11-19,AstraZeneca,3,2da,60 o más años,2,NL0123,14005202185.0
+F,80-89,San Luis,74,La Capital,056,Buenos Aires,06,Tigre,805,2021-09-15,Sputnik,3,2da,60 o más años,2,LZS6LZS7,14018265621.0
+F,80-89,Buenos Aires,06,Tigre,805,Buenos Aires,06,Tigre,805,2021-07-10,Sputnik,3,2da,60 o más años,2,II-660521,14095517035.0
+F,30-39,Córdoba,14,Capital,014,Córdoba,14,Capital,014,2021-08-03,AstraZeneca,3,2da,18 a 59 años CON Factores de Riesgo,2,NJ0272,12002929361.0
+F,30-39,Buenos Aires,06,Pergamino,623,Buenos Aires,06,Pergamino,623,2021-09-27,AstraZeneca,3,2da,Estratégico,2,NK0224,14152256965.0
+F,30-39,Córdoba,14,Capital,014,Córdoba,14,Capital,014,2021-08-03,AstraZeneca,3,2da,18 a 59 años CON Factores de Riesgo,2,NJ0272,14138998055.0
+F,50-59,Salta,66,Grl. José de San Martín,056,Salta,66,Grl. José de San Martín,056,2021-05-26,Sputnik,2,1ra,18 a 59 años CON Factores de Riesgo,1,0010321,14061027829.0
+M,50-59,Buenos Aires,06,General Pueyrredón,357,Buenos Aires,06,General Pueyrredón,357,2021-08-11,AstraZeneca,3,2da,18 a 59 años CON Factores de Riesgo,2,NJ0272,14096952563.0
+M,40-49,Mendoza,50,Las Heras,049,Mendoza,50,Las Heras,049,2021-08-22,AstraZeneca,3,2da,18 a 59 años CON Factores de Riesgo,2,77769,14101498587.0
+F,30-39,Buenos Aires,06,Almirante Brown,028,Buenos Aires,06,Almirante Brown,028,2021-10-17,Sputnik,3,2da,18 a 39 años SIN Factores de Riesgo,2,MBJ7MBJ8,14008170809.0
+F,40-49,Buenos Aires,06,Vicente López,861,Buenos Aires,06,Vicente López,861,2021-03-11,Sinopharm,2,1ra,Salud,1,2021010038,14046630583.0
+F,12-17,Buenos Aires,06,Avellaneda,035,Buenos Aires,06,Avellaneda,035,2021-09-23,Pfizer,2,1ra,12 a 17 años SIN Factores de Riesgo,1,FG2872,33505.0
+F,80-89,Mendoza,50,Capital,007,Mendoza,50,Capital,007,2021-07-05,Sputnik,3,2da,60 o más años,2,II-690621,14060540423.0
+M,18-29,Buenos Aires,06,Esteban Echeverría,260,Buenos Aires,06,Saavedra,700,2021-08-26,Sinopharm,2,1ra,18 a 39 años SIN Factores de Riesgo,1,202106B1335,3190895.0
