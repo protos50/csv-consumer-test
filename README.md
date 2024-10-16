@@ -1,6 +1,7 @@
 # COVID-19 Vaccination Data Analysis
 
-This repository contains a project for analyzing COVID-19 vaccination data using CSV files. It is developed in Python and allows the analysis to be executed through a GTK-3 based graphical user interface (GUI) or a command-line interface (CLI).
+This repository contains the Python code for a data analysis project completed as part of the requirements for the ECOM Python bootcamp.
+The primary objective of this project is to analyse COVID-19 vaccination data using CSV files. It is developed in Python and allows the analysis to be executed through a GTK-3 based graphical user interface (GUI) or a command-line interface (CLI).
 
 ## Project Structure
 
